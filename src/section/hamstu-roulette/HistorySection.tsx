@@ -59,7 +59,7 @@ const HistorySection = ({
   gameDetails,
 }: HistorySectionProps) => {
   const [history, setHistory] = useState(1);
-  const [date] = useState("Jun 12, 2024, 10.00 PM"); // Assuming this is static
+  const [date, setDate] = useState(gameDetails.gameEndTime); // Assuming this is static
   const [gameInfo, setGameInfo] = useState({ gameId, winningNumber });
   const [allHistoryList, setAllHistoryList] = useState<
     { address: string; winningAmount: number }[]
@@ -175,35 +175,26 @@ const HistorySection = ({
   const changeCurrentGameId = async (newGameId: number) => {
     setIsLoading(true);
     try {
-      const [
-        isFinalized,
-        __,
-        winNo,
-        minBet,
-        totBets,
-        noOfBets,
-        ___,
-        ____,
-        endTime,
-      ] = (await publicClient.readContract({
-        address: GAME_CONTRACT_BSC_ADDRESS,
-        abi: gameAbi,
-        functionName: "getGameDetails",
-        args: [newGameId],
-      })) as [
-        boolean,
-        unknown,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        unknown,
-        unknown,
-        bigint
-      ];
+      const [isFinalized, __, winNo, minBet, totBets, noOfBets, ____, endTime] =
+        (await publicClient.readContract({
+          address: GAME_CONTRACT_BSC_ADDRESS,
+          abi: gameAbi,
+          functionName: "getGameDetails",
+          args: [gameId],
+        })) as [
+          boolean,
+          unknown,
+          bigint,
+          bigint,
+          bigint,
+          bigint,
+          unknown,
+          unknown,
+          bigint
+        ];
 
       const newWinningNumber = Number(winNo);
-
+      setDate(new Date(Number(endTime) * 1000));
       // Update gameInfo to trigger fetching the new game history
       setGameInfo({ gameId: newGameId, winningNumber: newWinningNumber });
     } catch (error) {
@@ -259,7 +250,16 @@ const HistorySection = ({
                       {gameInfo.gameId}
                     </span>
                   </div>
-                  <div className="text-sm">{date}</div>
+                  <div className="text-sm">
+                    {date.toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </div>
                 </div>
               ) : (
                 <div className="mb-2 text-xl">

@@ -13,7 +13,7 @@ const config = createConfig(
     chains: [bsc],
     transports: {
       // RPC URL for BSC mainnet
-      [bsc.id]: http("https://bsc-dataseed1.bnbchain.org"),
+      [bsc.id]: http("https://bsc-dataseed.binance.org"),
     },
 
     walletConnectProjectId: "c7d9f7345fd53467c65953c6918eb0ba",
@@ -30,7 +30,7 @@ const config = createConfig(
 
 export const publicClient = createPublicClient({
   chain: bsc,
-  transport: http("https://bsc-dataseed.binance.org/"),
+  transport: http("https://bsc-dataseed.binance.org"),
 });
 
 const queryClient = new QueryClient();

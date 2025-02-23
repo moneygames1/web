@@ -20,7 +20,7 @@ import {
   formatUnits,
   parseUnits,
 } from "viem";
-import { baseSepolia } from "viem/chains";
+import { baseSepolia, bsc } from "viem/chains";
 import gameAbi from "@/helpers/abis/game.json";
 import Button from "./Button";
 import { useBalance } from "wagmi";
@@ -172,11 +172,11 @@ const BuyTilesModal = ({
           args: [GAME_CONTRACT_BSC_ADDRESS, parseUnits("10000", 6)],
         });
         const walletClient = createWalletClient({
-          chain: baseSepolia,
+          chain: bsc,
           transport: custom(window.ethereum),
         });
-        await walletClient.addChain({ chain: baseSepolia });
-        await walletClient.switchChain({ id: baseSepolia.id });
+        await walletClient.addChain({ chain: bsc });
+        await walletClient.switchChain({ id: bsc.id });
         console.log(request, "request");
         const hash = await walletClient
           .writeContract(request)
@@ -210,11 +210,11 @@ const BuyTilesModal = ({
       });
 
       const walletClient = createWalletClient({
-        chain: baseSepolia,
+        chain: bsc,
         transport: custom(window.ethereum),
       });
-      await walletClient.addChain({ chain: baseSepolia });
-      await walletClient.switchChain({ id: baseSepolia.id });
+      await walletClient.addChain({ chain: bsc });
+      await walletClient.switchChain({ id: bsc.id });
       const hash = await walletClient.writeContract(request).catch((error) => {
         console.error(error);
         throw error;

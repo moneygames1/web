@@ -23,7 +23,7 @@ import {
 import { FAQ } from "@/components/Faq";
 import Countdown from "react-countdown";
 import { useAccount, useBalance } from "wagmi";
-import { baseSepolia } from "viem/chains";
+import { baseSepolia, bsc } from "viem/chains";
 import GreenCoinSvg from "../../assets/images/green-coin.svg";
 import Confetti from "../../assets/images/confetti.gif";
 import StarSvg from "../../assets/images/star.svg";
@@ -189,32 +189,23 @@ const RatRoullete = () => {
       gameId: Number(gameId),
     });
 
-    const [
-      isFinalized,
-      __,
-      winNo,
-      minBet,
-      totBets,
-      noOfBets,
-      ___,
-      ____,
-      endTime,
-    ] = (await publicClient.readContract({
-      address: GAME_CONTRACT_BSC_ADDRESS,
-      abi: gameAbi,
-      functionName: "getGameDetails",
-      args: [gameId],
-    })) as [
-      boolean,
-      unknown,
-      bigint,
-      bigint,
-      bigint,
-      bigint,
-      unknown,
-      unknown,
-      bigint
-    ];
+    const [isFinalized, __, winNo, minBet, totBets, noOfBets, ____, endTime] =
+      (await publicClient.readContract({
+        address: GAME_CONTRACT_BSC_ADDRESS,
+        abi: gameAbi,
+        functionName: "getGameDetails",
+        args: [gameId],
+      })) as [
+        boolean,
+        unknown,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        unknown,
+        unknown,
+        bigint
+      ];
 
     const minBetAmount = +formatUnits(minBet, 6);
     const totalBets = +formatUnits(totBets, 6);
@@ -345,11 +336,11 @@ const RatRoullete = () => {
       });
 
       const walletClient = createWalletClient({
-        chain: baseSepolia,
+        chain: bsc,
         transport: custom(window.ethereum),
       });
-      await walletClient.addChain({ chain: baseSepolia });
-      await walletClient.switchChain({ id: baseSepolia.id });
+      await walletClient.addChain({ chain: bsc });
+      await walletClient.switchChain({ id: bsc.id });
       const hash = await walletClient.writeContract(request).catch((error) => {
         console.error(error);
         throw error;
@@ -496,7 +487,7 @@ const RatRoullete = () => {
             )}
           </section>
         </div>
-        {isTimeEnded && (
+        {!isTimeEnded && (
           <CountDownSection targetDate={new Date(gameDetails.gameEndTime)} />
         )}
 
