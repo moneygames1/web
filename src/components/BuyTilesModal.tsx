@@ -423,7 +423,7 @@ const BuyTilesModal = ({
           <Button
             extraClassName="text-xl lg:text-2xl !p-8 !pt-4 !pb-2 "
             onClick={placeBet}
-            isDisabled={isLoading}
+            isDisabled={isLoading || cart.length == 0}
           >
             {isLoading ? "Placing bet..." : "Place your bet"}
           </Button>
