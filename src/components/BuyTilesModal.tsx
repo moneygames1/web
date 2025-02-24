@@ -10,7 +10,7 @@ import BuyGameModal from "./BuyGameModal";
 import { publicClient } from "@/components/Web3Provider";
 import {
   GAME_CONTRACT_BSC_ADDRESS,
-  GAME_TYPE,
+  USDT_DECIMALS_ON_BSC,
   USDT_CONTRACT_ADDRESS,
 } from "@/helpers/constants";
 import {
@@ -132,7 +132,7 @@ const BuyTilesModal = ({
         setOrderedPlaced(
           userBetNumbers.map((betNumber: bigint, index: number) => ({
             betNumber: Number(betNumber),
-            usdValue: +formatUnits(userBetAmounts[index], 6),
+            usdValue: +formatUnits(userBetAmounts[index], USDT_DECIMALS_ON_BSC),
           }))
         );
       } catch (e) {
@@ -161,7 +161,7 @@ const BuyTilesModal = ({
       });
 
       if (
-        +formatUnits(approvedAmount, 6) <
+        +formatUnits(approvedAmount, USDT_DECIMALS_ON_BSC) <
         cart.reduce((acc, ele) => acc + ele.usdValue, 0)
       ) {
         const { request } = await publicClient.simulateContract({
@@ -169,7 +169,7 @@ const BuyTilesModal = ({
           address: USDT_CONTRACT_ADDRESS,
           abi: erc20Abi,
           functionName: "approve",
-          args: [GAME_CONTRACT_BSC_ADDRESS, parseUnits("10000", 6)],
+          args: [GAME_CONTRACT_BSC_ADDRESS, parseUnits("10000", USDT_DECIMALS_ON_BSC)],
         });
         const walletClient = createWalletClient({
           chain: bsc,
@@ -201,7 +201,7 @@ const BuyTilesModal = ({
         args: [
           currentGameSeasonId.gameId,
           cart.map((ele) => ele.betNumber),
-          cart.map((ele) => parseUnits(ele.usdValue.toString(), 6)),
+          cart.map((ele) => parseUnits(ele.usdValue.toString(), USDT_DECIMALS_ON_BSC)),
         ],
         // value: parseUnits(
         // 	cart.reduce((acc, ele) => acc + ele.usdValue, 0).toString(),
@@ -302,9 +302,9 @@ const BuyTilesModal = ({
     },
     [userBetInfo]
   );
-  const isLowBalance =
-    +formatUnits(balance?.value || (0 as unknown as bigint), 6) <
-    cart.reduce((acc, ele) => acc + ele.usdValue, 0);
+  // const isLowBalance =
+  //   +formatUnits(balance?.value || (0 as unknown as bigint), 6) <
+  //   cart.reduce((acc, ele) => acc + ele.usdValue, 0);
 
   if (!isOpen) return null;
   if (isBuyModal)

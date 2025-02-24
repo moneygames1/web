@@ -11,6 +11,7 @@ import {
   GAME_CONTRACT_BSC_ADDRESS,
   GAME_TYPE,
   USDT_CONTRACT_ADDRESS,
+  USDT_DECIMALS_ON_BSC,
 } from "@/helpers/constants";
 import gameAbi from "@/helpers/abis/game.json";
 import {
@@ -148,8 +149,8 @@ const RatRoullete = () => {
           return {
             gameId: Number(gameID),
             betNumber: Number(betNumber),
-            betAmount: +formatUnits(betAmount, 6),
-            winningAmount: +formatUnits(winningAmount, 6),
+            betAmount: +formatUnits(betAmount, USDT_DECIMALS_ON_BSC),
+            winningAmount: +formatUnits(winningAmount, USDT_DECIMALS_ON_BSC),
           };
         }
       );
@@ -207,8 +208,8 @@ const RatRoullete = () => {
         bigint
       ];
 
-    const minBetAmount = +formatUnits(minBet, 6);
-    const totalBets = +formatUnits(totBets, 6);
+    const minBetAmount = +formatUnits(minBet, USDT_DECIMALS_ON_BSC);
+    const totalBets = +formatUnits(totBets, USDT_DECIMALS_ON_BSC);
     const numberOfBets = Number(noOfBets);
     const gameEndTime = new Date(Number(endTime) * 1000);
     const winningNumber = Number(winNo);
@@ -224,12 +225,12 @@ const RatRoullete = () => {
     const oddBets = odds.map((odd, index) => {
       return {
         odd: Number(odd) / 10000, // 10000 is the precision
-        betAmount: +formatUnits(betAmounts[index], 6),
+        betAmount: +formatUnits(betAmounts[index], USDT_DECIMALS_ON_BSC),
         value: index + 1,
       };
     });
 
-    const totalBetAmount = +formatUnits(totBetAmount, 6);
+    const totalBetAmount = +formatUnits(totBetAmount, USDT_DECIMALS_ON_BSC);
 
     setGameDetails({
       isFinalized,
@@ -263,7 +264,7 @@ const RatRoullete = () => {
     setUserBetInfo(
       userBetNumbers.map((betNumber: bigint, index: number) => ({
         betNumber: Number(betNumber),
-        betAmount: +formatUnits(userBetAmounts[index], 6),
+        betAmount: +formatUnits(userBetAmounts[index], USDT_DECIMALS_ON_BSC),
       }))
     );
   };

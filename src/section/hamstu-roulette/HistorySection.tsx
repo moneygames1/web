@@ -13,6 +13,7 @@ import {
   GAME_CONTRACT_BSC_ADDRESS,
   GAME_TYPE,
   USDT_CONTRACT_ADDRESS,
+  USDT_DECIMALS_ON_BSC,
 } from "@/helpers/constants";
 import { publicClient } from "@/components/Web3Provider";
 import gameAbi from "@/helpers/abis/game.json";
@@ -116,7 +117,7 @@ const HistorySection = ({
           for (let i = 0; i < gameHistory[0].length; i++) {
             formattedHistory.push({
               address: gameHistory[0][i],
-              winningAmount: +formatUnits(BigInt(gameHistory[1][i]), 6),
+              winningAmount: +formatUnits(BigInt(gameHistory[1][i]), USDT_DECIMALS_ON_BSC),
             });
           }
 
@@ -156,8 +157,8 @@ const HistorySection = ({
               gameId: currentGameId,
               won: idx == winningIdx,
               betNumber: Number(betNumber),
-              winningAmount: +formatUnits(winningAmount, 6),
-              betAmount: +formatUnits(userBetAmounts[idx], 6),
+              winningAmount: +formatUnits(winningAmount, USDT_DECIMALS_ON_BSC),
+              betAmount: +formatUnits(userBetAmounts[idx], USDT_DECIMALS_ON_BSC),
             })
           );
           setYourHistoryList(newYourHistoryList);

@@ -15,6 +15,7 @@ import coin100 from '../assets/images/100-coin.svg';
 import {
 	GAME_CONTRACT_BSC_ADDRESS,
 	USDT_CONTRACT_ADDRESS,
+	USDT_DECIMALS_ON_BSC
 } from '@/helpers/constants';
 import { publicClient } from './Web3Provider';
 
@@ -64,10 +65,10 @@ const BuyGameModal = ({
 			args: [
 				gameId,
 				betNumberDetails.value,
-				parseUnits(value.toString(), 6),
+				parseUnits(value.toString(), USDT_DECIMALS_ON_BSC),
 			],
 		})) as bigint;
-		const formattedReturns = +formatUnits(returns, 6);
+		const formattedReturns = +formatUnits(returns, USDT_DECIMALS_ON_BSC);
 
 		setPotentialReturns({
 			loading: false,
@@ -89,7 +90,7 @@ const BuyGameModal = ({
 	}, [currentValue, isOpen]);
 
 	const isLowBalance =
-		+formatUnits(balance?.value || (0 as unknown as bigint), 6) < value;
+		+formatUnits(balance?.value || (0 as unknown as bigint), USDT_DECIMALS_ON_BSC) < value;
 
 	const isMinimumBet = value < minBetAmount;
 	const estimatedWinnings =
